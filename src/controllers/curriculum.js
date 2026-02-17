@@ -3,6 +3,7 @@ import { validationResult as expValidatorRes } from 'express-validator';
 import { controllerErrorObj } from '../util/error.js';
 import Curriculum from '../models/Currriculum.js';
 import sequelize from '../util/db.js';
+import { deleteFile } from '../util/file.js';
 
 
 export const getCurriculums = async (req, res, next) => {
@@ -26,6 +27,8 @@ export const getCurriculums = async (req, res, next) => {
 
 
 export const getActiveCurriculum = async (req, res, next) => {
+  console.log('oi')
+
   try {
     const activeCurriculum = await Curriculum.findOne({ where: { isActive: true } });
 
@@ -35,10 +38,12 @@ export const getActiveCurriculum = async (req, res, next) => {
 
     console.log('[GET ACTIVE CURRICULUM]');
 
-    res.status(200).json({
-      message: 'Active curriculum fetched successfully!',
-      curriculum: activeCurriculum,
-    });
+    res.sendFile(activeCurriculum.filePath)
+    
+    // res.status(200).json({
+    //   message: 'Active curriculum fetched successfully!',
+    //   curriculum: activeCurriculum,
+    // });
   }
   catch (err) {
     if (!err.statusCode) {
@@ -103,7 +108,7 @@ export const createCurriculum = async (req, res, next) => {
     const newCurriculum = await Curriculum.create({
       name,
       fileName: curriculumFile.filename,
-      filePath: `/uploads/curriculums/${curriculumFile.filename}`,
+      filePath: `src/uploads/${curriculumFile.filename}`,
       mimeType: curriculumFile.mimetype,
       isActive: false,
     }, { transaction });
@@ -156,7 +161,9 @@ export const deleteCurriculum = async (req, res, next) => {
         newestCurriculum.isActive = true;
         await newestCurriculum.save();
       }
-    }
+    };
+
+    deleteFile(curriculumToDelete.filePath);
 
     await curriculumToDelete.destroy();
 

@@ -1,5 +1,7 @@
 import multer from 'multer';
 import path from 'path';
+import slugify from 'slugify';
+
 
 
 const storage = multer.diskStorage({
@@ -8,10 +10,10 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     const ext = path.extname(file.originalname);
-    const name = file.originalname
-      .replace(ext, '')
-      .replace(/\s+/g, '_')
-      .toLowerCase();
+    const name = slugify(file.originalname.replace(ext, ''), {
+      lower: true,
+      strict: true
+    });
 
     cb(null, `${name}_${Date.now()}${ext}`);
   }
