@@ -5,6 +5,9 @@ import Curriculum from '../models/Currriculum.js';
 import sequelize from '../util/db.js';
 import { deleteFile } from '../util/file.js';
 
+import path from 'path';
+import fs from 'fs';
+
 
 export const getCurriculums = async (req, res, next) => {
   try {
@@ -26,24 +29,32 @@ export const getCurriculums = async (req, res, next) => {
 };
 
 
+
 export const getActiveCurriculum = async (req, res, next) => {
-  console.log('oi')
 
   try {
     const activeCurriculum = await Curriculum.findOne({ where: { isActive: true } });
 
     if (!activeCurriculum) {
-      return next(controllerErrorObj('No active curriculum found.', 404));
+      return res.status(404).json({
+        message: 'No active curriculum found.',
+      });
+    };
+
+    const absolutePath = path.resolve(activeCurriculum.filePath);
+
+    if (!fs.existsSync(absolutePath)) {
+      return next(controllerErrorObj('Active curriculum file not found on server.', 404));
     }
 
     console.log('[GET ACTIVE CURRICULUM]');
 
-    res.sendFile(activeCurriculum.filePath)
-    
-    // res.status(200).json({
-    //   message: 'Active curriculum fetched successfully!',
-    //   curriculum: activeCurriculum,
-    // });
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader(
+      'Content-Disposition',
+      'inline; filename="douglas_nunes_curriculum.pdf"'
+    )
+    return res.sendFile(absolutePath);
   }
   catch (err) {
     if (!err.statusCode) {

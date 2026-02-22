@@ -11,6 +11,7 @@ const router = express.Router();
 
 router.get('/curriculums', curriculumController.getCurriculums);
 
+
 router.get('/curriculum/active', curriculumController.getActiveCurriculum);
 
 
