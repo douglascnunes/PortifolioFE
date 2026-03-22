@@ -20,8 +20,8 @@ export const GRADUATION = [
 
 
 export const TAG_TYPE = [
-  "TECHNOLOGY",
-  "COMPETENCE",
+  "TECH",
+  "SKILL",
 ];
 
 export const TAG_RELATIONSHIP = [

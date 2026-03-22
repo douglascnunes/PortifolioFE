@@ -14,6 +14,10 @@ const PostContent = sequelize.define('postcontent', {
     type: Sequelize.STRING,
     allowNull: false,
   },
+  index: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+  }
 });
 
 

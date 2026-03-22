@@ -8,6 +8,12 @@ const Curriculum = sequelize.define('curriculum', {
     allowNull: false,
   },
 
+  isActive: {
+    type: Sequelize.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  },
+
   fileName: {
     type: Sequelize.STRING,
     allowNull: false,
@@ -24,11 +30,6 @@ const Curriculum = sequelize.define('curriculum', {
     defaultValue: 'application/pdf',
   },
 
-  isActive: {
-    type: Sequelize.BOOLEAN,
-    allowNull: false,
-    defaultValue: false,
-  },
 }, {
   timestamps: true,
 });

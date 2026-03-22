@@ -3,7 +3,7 @@ import isAuth from '../middlewares/isAuth.js';
 import { body } from 'express-validator';
 
 import * as curriculumController from '../controllers/curriculum.js';
-import uploadCurriculum from '../middlewares/upload.js';
+import { uploadCurriculum } from '../middlewares/upload.js';
 
 
 const router = express.Router();

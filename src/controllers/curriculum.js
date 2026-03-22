@@ -1,7 +1,7 @@
 import { Op } from 'sequelize';
 import { validationResult as expValidatorRes } from 'express-validator';
 import { controllerErrorObj } from '../util/error.js';
-import Curriculum from '../models/Currriculum.js';
+import Curriculum from '../models/Curriculum.js';
 import sequelize from '../util/db.js';
 import { deleteFile } from '../util/file.js';
 
@@ -109,6 +109,8 @@ export const createCurriculum = async (req, res, next) => {
   const { name } = req.body;
   const curriculumFile = req.file;
 
+  console.log(curriculumFile)
+
   const transaction = await sequelize.transaction()
 
   try {
@@ -119,7 +121,7 @@ export const createCurriculum = async (req, res, next) => {
     const newCurriculum = await Curriculum.create({
       name,
       fileName: curriculumFile.filename,
-      filePath: `src/uploads/${curriculumFile.filename}`,
+      filePath: `src/uploads/curriculum/${curriculumFile.filename}`,
       mimeType: curriculumFile.mimetype,
       isActive: false,
     }, { transaction });

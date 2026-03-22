@@ -3,39 +3,52 @@ import path from 'path';
 import slugify from 'slugify';
 
 
+function createUploader({ folder, allowedMimeTypes, allowedExt }) {
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'src/uploads');
-  },
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    const name = slugify(file.originalname.replace(ext, ''), {
-      lower: true,
-      strict: true
-    });
+  const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, `src/uploads/${folder}`);
+    },
+    filename: (req, file, cb) => {
+      const ext = path.extname(file.originalname);
+      const name = slugify(file.originalname.replace(ext, ''), {
+        lower: true,
+        strict: true
+      });
 
-    cb(null, `${name}_${Date.now()}${ext}`);
-  }
-});
+      cb(null, `${name}_${Date.now()}${ext}`);
+    }
+  });
 
-const fileFilter = (req, file, cb) => {
-  if (
-    file.mimetype === 'application/pdf' &&
-    path.extname(file.originalname).toLowerCase() === '.pdf'
-  ) {
-    cb(null, true);
-  } else {
-    cb(new Error('Apenas arquivos PDF são permitidos'), false);
-  }
+  const fileFilter = (req, file, cb) => {
+    const ext = path.extname(file.originalname).toLowerCase();
+
+    if (
+      allowedMimeTypes.includes(file.mimetype) &&
+      allowedExt.includes(ext)
+    ) {
+      cb(null, true);
+    } else {
+      cb(new Error('Tipo de arquivo não permitido'), false);
+    }
+  };
+
+  return multer({
+    storage,
+    fileFilter,
+  });
 };
 
-const uploadCurriculum = multer({
-  storage,
-  fileFilter,
-  // limits: {
-  //   fileSize: 5 * 1024 * 1024 // 5MB
-  // }
+
+export const uploadCurriculum = createUploader({
+  folder: 'curriculum',
+  allowedMimeTypes: ['application/pdf'],
+  allowedExt: ['.pdf']
 });
 
-export default uploadCurriculum;
+
+export const uploadTag = createUploader({
+  folder: 'tag',
+  allowedMimeTypes: ['image/svg+xml'],
+  allowedExt: ['.svg']
+});

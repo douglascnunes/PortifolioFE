@@ -9,11 +9,11 @@ import Tag from '../Tag.js';
 
 const Post = sequelize.define('post', {
   title: {
-    type: Sequelize.STRING,
+    type: Sequelize.STRING(40),
     allowNull: false,
   },
   sumary: {
-    type: Sequelize.STRING,
+    type: Sequelize.STRING(500),
     allowNull: false,
   },
   coverImage: {

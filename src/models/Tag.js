@@ -10,18 +10,32 @@ const Tag = sequelize.define('tag', {
     type: Sequelize.STRING,
     allowNull: false,
   },
-  icon: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
+
   description: {
     type: Sequelize.STRING,
-    allowNull: false,
+    allowNull: true,
   },
+
   type: {
     type: Sequelize.ENUM(TAG_TYPE),
     allowNull: false,
-  }
+  },
+
+  fileName: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+
+  filePath: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+
+  mimeType: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    defaultValue: 'image/svg+xml',
+  },
 });
 
 
