@@ -21,20 +21,9 @@ const Tag = sequelize.define('tag', {
     allowNull: false,
   },
 
-  fileName: {
-    type: Sequelize.STRING,
+  svg: {
+    type: Sequelize.TEXT('long'),
     allowNull: false,
-  },
-
-  filePath: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
-
-  mimeType: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    defaultValue: 'image/svg+xml',
   },
 });
 
